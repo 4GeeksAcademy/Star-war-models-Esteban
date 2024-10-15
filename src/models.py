@@ -70,3 +70,39 @@ class Characters(Base):
     url = Column(String(250))
     vehicles = Column(String(250), ForeignKey(Vehicles.id))
 
+class Favorites(Base):
+    __tablename__ = 'Favorites'
+    id = Column(Integer, primary_key=True)
+    vehicles_id = Column(Integer, ForeignKey(Vehicles.id))
+    planets_id = Column(Integer, ForeignKey(Planets.id))
+    characters_id = Column(Integer, ForeignKey(Characters.id))
+    favorites = Column(Enum('personaje', 'vehiculo', 'planeta', name='favorite_type'))
+
+class Usuario(Base):
+    __tablename__ = 'Usuario'
+    id = Column(Integer, primary_key=True)
+    nombre = Column(String(250))
+    apellido = Column(String(250))
+    email = Column(String(250))
+    direccion = Column(String(250))
+    telefono = Column(String(250))
+    celular = Column(String(250))
+    fecha_ingreso = Column(String(250))
+    login = relationship("Login", back_populates="usuario")
+
+class Login(Base):
+    __tablename__ = 'Login'
+    id = Column(Integer, primary_key=True)
+    username = Column(String(250))
+    password = Column(String(250))
+    usuario_id = Column(String(250), ForeignKey(Usuario.id))
+    usuario = relationship("Usuario", back_populates="login")
+    
+
+
+    def to_dict(self):
+        return {}
+
+## Draw from SQLAlchemy base
+render_er(Base, 'diagram.png')
+
